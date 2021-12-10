@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	  {
+		  "label": "tsc",
+		  "command": "tsc",
+		  "type": "shell",
+		  "isBackground": false,
+		  "dependsOrder": "sequence",
+		  "dependsOn": ["clearout"],
+		  "presentation": {
+			  "reveal": "always"
+		  }
+	  },
+      {
+          "label": "clearout",
+          "command": "if [ -d ./out; then rm -rf ./out; fi",
+          "type": "shell",
+          "isBackground": false,
+          "presentation": {
+              "reveal": "always"
+          }
+      }
+    ]
+}

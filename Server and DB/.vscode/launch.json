@@ -1,0 +1,15 @@
+{
+    "configurations": [
+    {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Program",
+        "program": "${workspaceFolder}/src/app.ts",
+        "outFiles": [
+            "${workspaceFolder}/out/**/*/.js"
+        ],
+        "autoAttachChildProcesses": true,
+        "outputCapture": "std"
+    }
+    ]
+}
