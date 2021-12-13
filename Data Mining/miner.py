@@ -2,7 +2,6 @@ from json import load
 from requests import get
 import os
 from searchtweets import gen_request_parameters, load_credentials, collect_results, ResultStream
-from searchtweets.result_stream import request
 
 __API_NAME_LIST = [
     "Twitter",
@@ -24,7 +23,7 @@ class API:
     def searchKeyword(self, keyword = "", itemSize = 10) -> dict:
         return dict()
 
-class __Tweet:
+class _Twitter__Tweet:
     def __init__(self,text = "") -> None:
         if text.startswith("RT @"):
             for ind in range(len(text)):
@@ -54,7 +53,14 @@ class Twitter(API):
         tws = tws["data"]
         results = []
         for tweet in tws:
-            results.append(str(__Tweet(tweet["text"])))
+            tw = str(_Twitter__Tweet(tweet["text"]))
+            for result in results:
+                if tw.startswith(result[:len(result)-5]) and result.endswith("...") and len(tw) > len(result):
+                    results.remove(result)
+                    results.append(tw)
+            if tw not in results:
+                results.append(tw)
+
 
         return results
 
@@ -79,5 +85,6 @@ def connectToApi(apiName = ""):
         # headers = {'Authorization': f'Bearer {keys[apiName]["Bearer Token"]}'}
         # get(f"https://api.twitter.com/2/tweets/search/recent?query=Elon%20Musk&max_results=10",headers=headers).content.decode()
 
-api = connectToApi("Twitter")
-res = api.searchKeyword("Elon Musk")
+
+# api = connectToApi("Twitter")
+# res = api.searchKeyword("Burdur Belediyesi",10)
