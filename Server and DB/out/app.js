@@ -9,7 +9,7 @@ const app = express_1.default();
 const config = require("../config.json");
 const port = 3000;
 app.use(express_1.default.json());
-const returner = "\t\t\t\tHello Natural Language Processers!";
+const returner = "Hello Natural Language Processers!";
 const msg = `App is running at http://localhost:${port}`;
 app.get("/", async (req, res) => {
     res.status(constants_1.HttpCode.Success).send(returner);
