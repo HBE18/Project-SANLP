@@ -1,90 +1,21 @@
-from json import load
-from requests import get
-import os
-from searchtweets import gen_request_parameters, load_credentials, collect_results, ResultStream
+from apiConnector import connectToApi, _getCurrentApi
 
-__API_NAME_LIST = [
-    "Twitter",
-    "Facebook",
-    "Instagram",
-    "Youtube",
-    "Linkedin"
-]
+def searchKeyword(keyword="",itemSize=10) -> list:
+    """
+    Takes a keyword and an itemSize and searches that keyword in connected API.
 
-__currentApi = None
+    ``keyword`` is the string which is searched on the API.
 
-class API:
-    def __init__(self,name) -> None:
-        self.name = name
+    ``itemSize`` is the integer which is requested result size.
 
-    def connect(self) -> str:
-        return get("www" + self.name + ".com").content.decode()
+    Example Usage:
+    >>> searchKeyword("Ankara",10)
+    """
 
-    def searchKeyword(self, keyword = "", itemSize = 10) -> dict:
-        return dict()
+    return _getCurrentApi().searchKeyword(keyword,itemSize)
 
-class _Twitter__Tweet:
-    def __init__(self,text = "") -> None:
-        if text.startswith("RT @"):
-            for ind in range(len(text)):
-                if text[ind] == ":":
-                    break
-            ind += 2
-            self.tweet = text[ind:]
-        else:
-            self.tweet = text
-    
-    def __str__(self) -> str:
-        return self.tweet
-
-class Twitter(API):
-    def __init__(self,search_args) -> None:
-        super().__init__("twitter")
-        global __currentApi
-        __currentApi = self
-        self.searchArgs = search_args
-    
-    def searchKeyword(self,keyword = "", itemSize = 10) -> list:
-        query = gen_request_parameters(keyword, results_per_call = itemSize, granularity= None)
-        
-        tws = collect_results(query, max_tweets = itemSize, result_stream_args = self.searchArgs)
-
-        tws = tws[0]
-        tws = tws["data"]
-        results = []
-        for tweet in tws:
-            tw = str(_Twitter__Tweet(tweet["text"]))
-            for result in results:
-                if tw.startswith(result[:len(result)-5]) and result.endswith("...") and len(tw) > len(result):
-                    results.remove(result)
-                    results.append(tw)
-            if tw not in results:
-                results.append(tw)
-
-
-        return results
-
-def connectToApi(apiName = ""):
-    cwd = os.getcwd()
-    if cwd.endswith("Data Mining"):
-        fp = open("keys.json","r")
-    else:
-        fp = open("./Data Mining/keys.json","r")
-    keys = load(fp)
-    fp.close()
-    if apiName == "":
-        return API("")
-    elif apiName == "Twitter":
-        os.environ["SEARCHTWEETS_ENDPOINT"] = "https://api.twitter.com/2/tweets/search/recent"
-        os.environ["SEARCHTWEETS_BEARER_TOKEN"] = keys[apiName]["Bearer Token"]
-        os.environ["SEARCHTWEETS_CONSUMER_KEY"] = keys[apiName]["API Key"]
-        os.environ["SEARCHTWEETS_CONSUMER_SECRET"] = keys[apiName]["API Key Secret"]
-
-        cred = load_credentials("","")
-        return Twitter(cred)
-        # headers = {'Authorization': f'Bearer {keys[apiName]["Bearer Token"]}'}
-        # get(f"https://api.twitter.com/2/tweets/search/recent?query=Elon%20Musk&max_results=10",headers=headers).content.decode()
-
-
-# api = connectToApi("Twitter")
-# res = api.searchKeyword("Burdur Belediyesi",10)
+"""
+Example Usage:
+>>> connectToApi("Twitter")
+>>> res = searchKeyword("Ankara",10)
+"""
