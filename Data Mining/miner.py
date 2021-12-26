@@ -1,4 +1,5 @@
 from apiConnector import connectToApi, _getCurrentApi
+from YouTube import YouTube
 
 def searchKeyword(keyword="",itemSize=10, numberOfComments = 0) -> list:
     """
@@ -12,15 +13,26 @@ def searchKeyword(keyword="",itemSize=10, numberOfComments = 0) -> list:
     >>> searchKeyword("Ankara",10)
     """
     if numberOfComments == 0:
-        return _getCurrentApi().searchKeyword(keyword,itemSize)
+        result = _getCurrentApi().searchKeyword(keyword,itemSize)
     else:
-        return _getCurrentApi().searchKeyword(keyword,itemSize,numberOfComments = numberOfComments)
+        result = _getCurrentApi().searchKeyword(keyword,itemSize,numberOfComments = numberOfComments)
+    if isinstance(_getCurrentApi(),YouTube):
+        _getCurrentApi().closeBrowser()
+
+    return result
 
 """
 Example Usage:
 >>> connectToApi("Twitter")
 >>> res = searchKeyword("Ankara",10)
-"""
 
-connectToApi("YouTube")
-res = searchKeyword("dolar",2,numberOfComments=3)
+For YouTube:
+    YouTube API's search keyword function takes 1 additional parameter named ``numberOfComments`` and returns a dictionary.
+    That dictionary has 2 keys: Captions and Comments.
+    Captions has caption list of the videos.
+    Comments has commments list of the videos.
+    
+    Example Usage:
+        >>> connectToApi("YouTube")
+        >>> res = searchKeyword("Atari",10,numberOfComments=10)
+"""
