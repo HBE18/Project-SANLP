@@ -1,9 +1,11 @@
-from apiConnector import connectToApi, _getCurrentApi
-from YouTube import YouTube
+from apiConnector import Connector
 
-def searchKeyword(keyword="",itemSize=10, numberOfComments = 0) -> list:
+
+def searchKeyword(con: Connector, keyword="", itemSize=10, numberOfComments=0) -> list:
     """
     Takes a keyword and an itemSize and searches that keyword in connected API.
+
+    ```con```is the object of the Connector class.
 
     ``keyword`` is the string which is searched on the API.
 
@@ -12,18 +14,19 @@ def searchKeyword(keyword="",itemSize=10, numberOfComments = 0) -> list:
     Example Usage:
     >>> searchKeyword("Ankara",10)
     """
+    currentApi = con._getCurrentApi()
     if numberOfComments == 0:
-        result = _getCurrentApi().searchKeyword(keyword,itemSize)
+        result = currentApi.searchKeyword(keyword, itemSize)
     else:
-        result = _getCurrentApi().searchKeyword(keyword,itemSize,numberOfComments = numberOfComments)
-    if isinstance(_getCurrentApi(),YouTube):
-        _getCurrentApi().closeBrowser()
+        result = currentApi.searchKeyword(keyword, itemSize, numberOfComments=numberOfComments)
 
     return result
 
+
 """
 Example Usage:
->>> connectToApi("Twitter")
+>>> con = Connector()
+>>> con.connectToApi("Twitter")
 >>> res = searchKeyword("Ankara",10)
 
 For YouTube:
@@ -33,6 +36,13 @@ For YouTube:
     Comments has commments list of the videos.
     
     Example Usage:
-        >>> connectToApi("YouTube")
+        >>> con = Connector()
+        >>> con.connectToApi("YouTube")
         >>> res = searchKeyword("Atari",10,numberOfComments=10)
 """
+con = Connector()
+con.connectToApi("Hurriyet")
+res = searchKeyword(con,"Ankara",20)
+
+for r in res:
+    print(r)

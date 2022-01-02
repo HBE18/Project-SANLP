@@ -2,23 +2,15 @@ from time import sleep
 from API import API
 from pytube import Search
 from xml.etree import ElementTree as eT
-from selenium.webdriver import Firefox
-from os import getcwd
+
 
 
 class YouTube(API):
     def __init__(self) -> None:
         super().__init__("YouTube")
-        cwd = getcwd()
-        if cwd.endswith("Data Mining"):
-            self.browser = Firefox(executable_path="geckodriver.exe")
-        else:
-            self.browser = Firefox(executable_path="./Data Mining/geckodriver.exe")
-
-    def closeBrowser(self):
-        self.browser.close()
 
     def searchKeyword(self, keyword="", itemSize=9, numberOfComments=0) -> dict:
+        self.openBrowser()
         ind = 0
         videos = []
         while ind < itemSize:
@@ -61,6 +53,7 @@ class YouTube(API):
                     allComments[ind] = allComments[ind][:numberOfComments]
         commS.append(allComments)
         captRes.append(allCaptions.copy())
+        self.closeBrowser()
         return results
 
     def xmlToSentenceList(self, xml: str) -> list:
@@ -103,7 +96,7 @@ class YouTube(API):
         if commentsTurnedOff:
             print("Turned off")
         else:
-            self.__infiniteScroll(5)
+            self.infiniteScroll(5)
             commentsS = self.browser.find_elements_by_css_selector(
                 "ytd-comment-thread-renderer.style-scope > ytd-comment-renderer:nth-child(1) > div:nth-child(3) > div:nth-child(2) > ytd-expander:nth-child(2) > div:nth-child(1) > yt-formatted-string:nth-child(3)")
             comments = []
@@ -120,17 +113,3 @@ class YouTube(API):
             return comments
         return []
 
-    def __infiniteScroll(self,pauseTime:int):
-        last_height = self.browser.execute_script("return document.body.scrollHeight")
-        while True:
-            # Scroll down to bottom
-            self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-            # Wait to load page
-            sleep(pauseTime)
-
-            # Calculate new scroll height and compare with last scroll height
-            new_height = self.browser.execute_script("return document.body.scrollHeight")
-            if new_height == last_height:
-                break
-            last_height = new_height
