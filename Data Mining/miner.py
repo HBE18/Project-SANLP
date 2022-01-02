@@ -43,6 +43,3 @@ For YouTube:
 con = Connector()
 con.connectToApi("Hurriyet")
 res = searchKeyword(con,"Ankara",20)
-
-for r in res:
-    print(r)
