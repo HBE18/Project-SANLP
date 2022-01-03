@@ -37,8 +37,13 @@ class Milliyet(API):
 
         url = f"https://www.milliyet.com.tr/haberleri/{self.makeQuery(keyword)}"
         self.browser.get(url)
+        sleep(1)
 
         ##Button click for more news
+        self.scroll()
+        sleep(0.3)
+        otButton = self.browser.find_element(By.ID, "onetrust-accept-btn-handler")
+        otButton.click()
 
         while (True):
             try:
@@ -68,10 +73,11 @@ class Milliyet(API):
             links.append(newTitle.get_attribute("href"))
 
         for link in links:
-            if "milliyet.tv" in link:
-                pass
+            if "/milliyet-tv/" in link:
+                continue
 
             self.browser.get(link)
+            sleep(0.3)
 
             title = self.browser.find_element(By.CLASS_NAME, "nd-article__title").text
             spot = self.browser.find_element(By.CLASS_NAME, "nd-article__spot").text
@@ -85,8 +91,6 @@ class Milliyet(API):
             article = spot + "###" + pler
             newsWillReturned.append(News(title, article))
 
-        for news in newsWillReturned:
-            print(f"Title: {news.title}\nArticle: {news.article}")
-
+        self.closeBrowser()
 
         return newsWillReturned

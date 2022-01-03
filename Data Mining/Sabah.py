@@ -26,16 +26,16 @@ class Sabah(API):
         ##Getting text from related news
         for link in links:
             self.browser.get(link)
-            if "yazarlar" not in link:
+            if "/yazarlar/" not in link:
                 kutu = self.browser.find_element_by_css_selector("div.col-md-8:nth-child(1)")
                 title = kutu.find_element_by_class_name("pageTitle").text
-                article = self.browser.find_element_by_css_selector(".spot").text
+                articleFirstPart = self.browser.find_element_by_css_selector(".spot").text
                 articlekutu = kutu.find_element_by_class_name("newsDetailText")
                 article2 = articlekutu.find_elements_by_tag_name("p")
-                yazi = ""
+                articleSecondPart = ""
                 for art in article2:
-                    article += "\n"
-                    article += art.text
+                    articleSecondPart += art.text
+                article = articleFirstPart + "###" + articleSecondPart
                 newsWillReturned.append(News(title,article))
             else:
                 kutu = self.browser.find_element_by_css_selector("#articleframe > div:nth-child(1) > div")

@@ -31,7 +31,6 @@ class Posta(API):
 
             article = articleFirstPart + "###" + articleSecondPart
             newsWillReturned.append(News(title, article))
-        for news in newsWillReturned:
-            print(f"Title: {news.title}\nArticle: {news.article}")
 
+        self.closeBrowser()
         return newsWillReturned

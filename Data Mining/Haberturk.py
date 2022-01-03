@@ -16,7 +16,7 @@ class Haberturk(API):
         self.browser.get(url)
 
         self.infiniteScroll(1)
-
+        ##TODO Fix the titles!
         links = []
         newsWillReturned = []
 
@@ -48,9 +48,6 @@ class Haberturk(API):
             
             article = articleFirstPart + "###" + articleSecondPart
             newsWillReturned.append(News(title,article))
-
-        for news in newsWillReturned:
-            print(f"Title: {news.title}\nArticle: {news.article}\n")
 
 
         self.closeBrowser()

@@ -68,6 +68,4 @@ class Sozcu(API):
                 newsWillReturned.append(News(title,article))
 
         self.closeBrowser()
-        for news in newsWillReturned:
-            print(f"Title: {news.title}\nArticle: {news.article}")
         return newsWillReturned

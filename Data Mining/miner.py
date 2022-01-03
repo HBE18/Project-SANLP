@@ -41,5 +41,8 @@ For YouTube:
         >>> res = searchKeyword("Atari",10,numberOfComments=10)
 """
 con = Connector()
-con.connectToApi("Hurriyet")
-res = searchKeyword(con,"Ankara",20)
+con.connectToApi("Milliyet")
+res = searchKeyword(con,"Mansur Yavaş",20)
+
+for news in res:
+    print(f"Title: {news.title}\nArticle: {news.article}")

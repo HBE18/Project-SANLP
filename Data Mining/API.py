@@ -49,3 +49,22 @@ class API:
             for s in st:
                 string += s + ("" if (st[::-1])[0] == s else "%20")
         return string
+
+    def makeQuery(self, keyword =""):
+        turToEng = {
+            "ç": "c",
+            "ı": "i",
+            "ö": "o",
+            "ş": "s",
+            "ü": "u"
+        }
+        keyword = keyword.lower()
+        value = ""
+        for que in keyword:
+            if que in turToEng.keys():
+                value += turToEng[que]
+            elif que == " ":
+                value += "-"
+            else:
+                value += que
+        return value

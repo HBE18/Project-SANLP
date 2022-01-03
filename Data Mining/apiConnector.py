@@ -1,7 +1,12 @@
 from API import API
+from Haberturk import Haberturk
+from Sabah import Sabah
 from Twitter import Twitter
+from Sozcu import Sozcu
 from YouTube import YouTube
+from Milliyet import Milliyet
 from Hurriyet import Hurriyet
+from Posta import Posta
 from json import load
 from os import getcwd
 
@@ -12,7 +17,12 @@ class Connector:
         "YouTube"
     ]
     newsList = [
-        "Hurriyet"
+        "Hurriyet",
+        "Sabah",
+        "Haberturk",
+        "Sozcu",
+        "Milliyet",
+        "Posta"
     ]
 
     def __init__(self):
@@ -30,7 +40,12 @@ class Connector:
             },
 
             "News": {
-                "Hurriyet": Hurriyet()
+                "Hurriyet": Hurriyet(),
+                "Sabah": Sabah(),
+                "Haberturk": Haberturk(),
+                "Sozcu": Sozcu(),
+                "Milliyet": Milliyet(),
+                "Posta": Posta()
             }
         }
 
