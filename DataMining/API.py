@@ -10,10 +10,10 @@ class API:
 
     def openBrowser(self):
         cwd = getcwd()
-        if cwd.endswith("Data Mining"):
+        if cwd.endswith("DataMining"):
             self.browser = Firefox(executable_path="geckodriver.exe")
         else:
-            self.browser = Firefox(executable_path="./Data Mining/geckodriver.exe")
+            self.browser = Firefox(executable_path="./DataMining/geckodriver.exe")
 
     def closeBrowser(self):
         self.browser.close()

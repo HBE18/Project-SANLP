@@ -1,17 +1,18 @@
-from API import API
-from Haberturk import Haberturk
-from Sabah import Sabah
-from Twitter import Twitter
-from Sozcu import Sozcu
-from YouTube import YouTube
-from Milliyet import Milliyet
-from Hurriyet import Hurriyet
-from Posta import Posta
+from .API import API
+from .Haberturk import Haberturk
+from .Sabah import Sabah
+from .Twitter import Twitter
+from .Sozcu import Sozcu
+from .YouTube import YouTube
+from .Milliyet import Milliyet
+from .Hurriyet import Hurriyet
+from .Posta import Posta
 from json import load
 from os import getcwd
 
 class Connector:
     __currentApi = None
+    __currentApiName = ""
     socialMediaList = [
         "Twitter",
         "YouTube"
@@ -27,10 +28,10 @@ class Connector:
 
     def __init__(self):
         cwd = getcwd()
-        if cwd.endswith("Data Mining"):
+        if cwd.endswith("DataMining"):
             fp = open("keys.json", "r")
         else:
-            fp = open("./Data Mining/keys.json", "r")
+            fp = open("./DataMining/keys.json", "r")
         keys = load(fp)
         fp.close()
         self.allApis = {
@@ -48,6 +49,9 @@ class Connector:
                 "Posta": Posta()
             }
         }
+
+    def _getApiName(self) -> str:
+        return self.__currentApiName
 
     def _getCurrentApi(self) -> object:
         return self.__currentApi
@@ -70,3 +74,5 @@ class Connector:
             self.__currentApi = self.allApis["News"][apiName]
         else:
             raise (Exception("Wrong apiName sended to the connectToApi() function"))
+
+        self.__currentApiName = apiName

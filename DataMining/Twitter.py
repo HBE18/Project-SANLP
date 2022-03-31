@@ -1,4 +1,4 @@
-from API import API
+from .API import API
 from requests import get
 
 class _Twitter__Tweet:
@@ -31,17 +31,21 @@ class Twitter(API):
             tws = self.__getResults(keyword, itemSize, headers, nextToken, oldest)
             meta = tws["meta"]
             data = tws["data"]
-            takenNumOfResult += int(meta["result_count"])
+
             nextToken = meta["next_token"] if "next_token" in meta.keys() else None
             oldest = meta["oldest_id"]
             for tweet in data:
                 tw = str(_Twitter__Tweet(tweet["text"]))
+                results.append(tw)
+
                 for result in results:
                     if tw.startswith(result[:len(result) - 5]) and result.endswith("...") and len(tw) > len(result):
                         results.remove(result)
                         results.append(tw)
                 if tw not in results:
                     results.append(tw)
+
+            takenNumOfResult += int(meta["result_count"])
 
         return results
 

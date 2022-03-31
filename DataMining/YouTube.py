@@ -1,5 +1,5 @@
 from time import sleep
-from API import API
+from .API import API
 from pytube import Search
 from xml.etree import ElementTree as eT
 

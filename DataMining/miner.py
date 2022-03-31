@@ -1,7 +1,7 @@
-from apiConnector import Connector
+from .apiConnector import Connector
 
 
-def searchKeyword(con: Connector, keyword="", itemSize=10, numberOfComments=0) -> list:
+def searchKeyword(con: Connector, keyword="", itemSize=10, numberOfComments=0) -> dict:
     """
     Takes a keyword and an itemSize and searches that keyword in connected API.
 
@@ -20,7 +20,7 @@ def searchKeyword(con: Connector, keyword="", itemSize=10, numberOfComments=0) -
     else:
         result = currentApi.searchKeyword(keyword, itemSize, numberOfComments=numberOfComments)
 
-    return result
+    return {con._getApiName(): result}
 
 
 """
@@ -41,8 +41,5 @@ For YouTube:
         >>> res = searchKeyword("Atari",10,numberOfComments=10)
 """
 con = Connector()
-con.connectToApi("Milliyet")
-res = searchKeyword(con,"Mansur Yavaş",20)
-
-for news in res:
-    print(f"Title: {news.title}\nArticle: {news.article}")
+con.connectToApi("Hurriyet")
+res = searchKeyword(con,"Mansur Yavaş",10)

@@ -1,5 +1,5 @@
-from API import API
-from News import News
+from .API import API
+from .News import News
 from math import ceil
 from selenium.webdriver.common.by import By
 from time import sleep
