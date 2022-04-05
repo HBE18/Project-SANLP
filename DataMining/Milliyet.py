@@ -1,9 +1,10 @@
+from time import sleep
+
+from selenium.common.exceptions import ElementNotInteractableException
+from selenium.webdriver.common.by import By
+
 from .API import API
 from .News import News
-from math import ceil
-from selenium.webdriver.common.by import By
-from time import sleep
-from selenium.common.exceptions import ElementNotInteractableException
 
 turToEng = {
     "ç": "c",
@@ -30,7 +31,7 @@ class Milliyet(API):
                 value += que
         return value
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
         self.openBrowser()
         links = []
         newsWillReturned = []

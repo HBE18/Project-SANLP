@@ -1,14 +1,16 @@
+from time import sleep
+
+from selenium.webdriver.common.by import By
+
 from .API import API
 from .News import News
-from math import ceil
-from time import sleep
-from selenium.webdriver.common.by import By
+
 
 class Sozcu(API):
     def __init__(self):
         super().__init__("Sozcu")
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
         self.openBrowser()
         links = []
         newsWillReturned = []

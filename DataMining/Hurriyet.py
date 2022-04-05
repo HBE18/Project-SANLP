@@ -1,15 +1,16 @@
-from .API import API
-from .News import News
 from math import ceil
 from time import sleep
-from selenium.webdriver.common.by import By
+
+from .API import API
+from .News import News
+
 
 class Hurriyet(API):
     def __init__(self):
         super().__init__("Hurriyet")
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
-        pagination = ceil(itemSize/10)
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
+        pagination = ceil(itemSize / 10)
         currentPage = 1
         self.openBrowser()
         links = []

@@ -1,5 +1,7 @@
-from .API import API
 from requests import get
+
+from .API import API
+
 
 class _Twitter__Tweet:
     def __init__(self, text="") -> None:
@@ -21,7 +23,7 @@ class Twitter(API):
         super().__init__("twitter")
         self.searchArgs = search_args
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
         results = []
         takenNumOfResult = 0
         oldest = None

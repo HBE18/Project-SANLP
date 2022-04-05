@@ -1,15 +1,16 @@
 from time import sleep
-from .API import API
-from pytube import Search
 from xml.etree import ElementTree as eT
 
+from pytube import Search
+
+from .API import API
 
 
 class YouTube(API):
     def __init__(self) -> None:
         super().__init__("YouTube")
 
-    def searchKeyword(self, keyword="", itemSize=9, numberOfComments=0) -> dict:
+    def searchKeyword(self, keyword="", itemSize=10, numberOfComments=0) -> dict:
         self.openBrowser()
         ind = 0
         videos = []
@@ -26,7 +27,7 @@ class YouTube(API):
         results["Comments"] = commS
         allComments = []
         allCaptions = []
-        while len(allComments) * len(allCaptions) != itemSize * numberOfComments:
+        while len(allComments) * len(allCaptions) < itemSize * numberOfComments:
             for yt in videos:
                 id = yt.vid_info["videoDetails"]["videoId"]
                 try:
@@ -38,7 +39,7 @@ class YouTube(API):
                         continue
 
                 comments = self.__getComments(id)
-                allComments.append(comments.copy())
+                allComments.append(comments)
                 sentList = self.xmlToSentenceList(caption.xml_captions)
                 sentList = sentList[::-1]
                 allCaptions.append(sentList[0])
@@ -46,13 +47,13 @@ class YouTube(API):
                     break
         if len(allCaptions) > itemSize:
             allCaptions = allCaptions[:itemSize]
-        if len(allComments) > itemSize:
-            allComments = allComments[:itemSize]
+        if len(allComments) > numberOfComments:
+            allComments = allComments[:numberOfComments]
             for ind in range(len(allComments)):
                 if len(allComments[ind]) > numberOfComments:
                     allComments[ind] = allComments[ind][:numberOfComments]
-        commS.append(allComments)
-        captRes.append(allCaptions.copy())
+        commS.extend(allComments)
+        captRes.extend(allCaptions)
         self.closeBrowser()
         return results
 

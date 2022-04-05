@@ -1,14 +1,16 @@
+from time import sleep
+
+from selenium.webdriver.common.by import By
+
 from .API import API
 from .News import News
-from math import ceil
-from time import sleep
-from selenium.webdriver.common.by import By
+
 
 class Haberturk(API):
     def __init__(self):
         super().__init__("Haberturk")
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
         url = f"https://www.haberturk.com/arama/?tr={self.createQuery(keyword)}&tip=haber&siralama=yeni"
 
         self.openBrowser()

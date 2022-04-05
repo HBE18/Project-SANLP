@@ -15,12 +15,9 @@ def searchKeyword(con: Connector, keyword="", itemSize=10, numberOfComments=0) -
     >>> searchKeyword("Ankara",10)
     """
     currentApi = con._getCurrentApi()
-    if numberOfComments == 0:
-        result = currentApi.searchKeyword(keyword, itemSize)
-    else:
-        result = currentApi.searchKeyword(keyword, itemSize, numberOfComments=numberOfComments)
+    result = currentApi.searchKeyword(keyword, itemSize, numberOfComments)
 
-    return {con._getApiName(): result}
+    return result
 
 
 """
@@ -40,6 +37,3 @@ For YouTube:
         >>> con.connectToApi("YouTube")
         >>> res = searchKeyword("Atari",10,numberOfComments=10)
 """
-con = Connector()
-con.connectToApi("Hurriyet")
-res = searchKeyword(con,"Mansur Yavaş",10)

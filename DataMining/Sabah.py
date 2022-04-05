@@ -1,12 +1,12 @@
 from .API import API
 from .News import News
-from math import ceil
+
 
 class Sabah(API):
     def __init__(self):
         super().__init__("Sabah")
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
         self.openBrowser()
         links = []
         newsWillReturned = []

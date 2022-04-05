@@ -1,13 +1,16 @@
+from time import sleep
+
+from selenium.webdriver.common.by import By
+
 from .API import API
 from .News import News
-from selenium.webdriver.common.by import By
-from time import sleep
+
 
 class Posta(API):
     def __init__(self):
         super().__init__("Posta")
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
         self.openBrowser()
         links = []
         newsWillReturned = []

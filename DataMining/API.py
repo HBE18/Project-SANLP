@@ -1,7 +1,8 @@
-from requests import get
-from selenium.webdriver import Firefox
 from os import getcwd
 from time import sleep
+
+from requests import get
+from selenium.webdriver import Firefox
 
 
 class API:
@@ -11,9 +12,11 @@ class API:
     def openBrowser(self):
         cwd = getcwd()
         if cwd.endswith("DataMining"):
-            self.browser = Firefox(executable_path="geckodriver.exe")
+            self.browser = Firefox(
+                executable_path="geckodriver.exe")  # Chrome(executable_path="D:\Codes\Python\ChromeDriver\chromedriver_win32\chromedriver.exe")#Firefox(executable_path="geckodriver.exe")
         else:
-            self.browser = Firefox(executable_path="./DataMining/geckodriver.exe")
+            self.browser = Firefox(
+                executable_path="./DataMining/geckodriver.exe")  #Chrome(executable_path="D:\Codes\Python\ChromeDriver\chromedriver_win32\chromedriver.exe")#Firefox(executable_path="./DataMining/geckodriver.exe")
 
     def closeBrowser(self):
         self.browser.close()
@@ -39,7 +42,7 @@ class API:
     def connect(self) -> str:
         return get("www" + self.name + ".com").content.decode()
 
-    def searchKeyword(self, keyword="", itemSize=10) -> list:
+    def searchKeyword(self, keyword="", itemSize=10, *args) -> list:
         return list()
 
     def createQuery(self, string) -> str:
