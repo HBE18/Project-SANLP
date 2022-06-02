@@ -1,8 +1,9 @@
 from Preprocessing.preprocessor import Preprocessor
+import sys
 
 prep = Preprocessor()
 
-prep.mine(["YouTube"], "Mansur Yavaş", itemSize=10, numberOfComments=5)
+prep.mine(["YouTube"], sys.argv[1], itemSize=10, numberOfComments=5)
 res = prep.getData()
 
 """for source, data in res.items():
@@ -20,7 +21,7 @@ for source, data in res.items():
     if source == "YouTube":
         for cont in data["Content"]:
             for c in cont:
-                print(len(c.split(" ")))
+                print(c)
             print("--------")
     elif source == "Twitter":
         for da in data:
