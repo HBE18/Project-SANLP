@@ -68,6 +68,7 @@ class Controller():
 
     stopwordList = []
     tokenizer = BertTokenizer.from_pretrained('dbmdz/bert-base-turkish-128k-cased', do_lower_case=True)
+    bert_classifier = BertClassifier(True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def __init__(self):        
@@ -75,10 +76,10 @@ class Controller():
         torch.cuda.get_device_name(0)
 
         with open("stopwords.txt","r") as file:
-            stopwordList = file.readlines()
+            self.stopwordList = file.readlines()
 
-        for i in range(len(stopwordList)):
-            stopwordList[i] = stopwordList[i].replace("\n","")
+        for i in range(len(self.stopwordList)):
+            self.stopwordList[i] = self.stopwordList[i].replace("\n","")
 
         with open("model.pickle","rb") as f:
             self.bert_classifier = pickle.load(f)
@@ -92,7 +93,7 @@ class Controller():
         ls = []
         ls.append("[CLS]")
         for t in tknL:
-            if (not t.content.startswith("_")) and (not str(t.type_) == "Type.URL") and (not str(t.type_) == "Type.Punctuation") and (not t.content in stopwordList):
+            if (not t.content.startswith("_")) and (not str(t.type_) == "Type.URL") and (not str(t.type_) == "Type.Punctuation") and (not str(t.type_) == "Type.Mention") and (not str(t.type_) == "Type.HashTag") and (not t.content in stopwordList):
                 ls.append(utils.to_unicode(t.content))
         ls.append("[SEP]")
         return ls
@@ -155,10 +156,10 @@ class Controller():
 
         return probs
 
-    def avg_result(self, dat):
-        sentences = TurkishSentenceExtractor().from_paragraph(dat)
+    def avg_result(self, dat:list[str]):
+        #sentences = TurkishSentenceExtractor().from_paragraph(dat)
 
-        inp_id, att_mask = self.prep(sentences)
+        inp_id, att_mask = self.prep(dat)
         test_dataset = TensorDataset(inp_id, att_mask)
         test_sampler = SequentialSampler(test_dataset)
         test_dataloader = DataLoader(test_dataset, sampler=test_sampler, batch_size=32)
@@ -170,7 +171,7 @@ class Controller():
             ind = np.argmax(i)
             val.append(ind)
             if(ind == 0):
-                res[0] = res[0] + 1
+                res[0] = res[0] + 1  ## P - Neu - N
             elif(ind == 2):
                 res[1] = res[1] + 1
             else:

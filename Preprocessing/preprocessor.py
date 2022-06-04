@@ -181,7 +181,7 @@ class Preprocessor:
             #         dataPool["Comments"].append(self.__normalizer(data))
             #     del(comments)
             else:
-                pass
+                pass ##TODO
                 
             self.__minedData[source] = dataPool.copy()
             del(dataPool)

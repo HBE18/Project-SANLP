@@ -1,6 +1,6 @@
 import psycopg2
 from Preprocessing.preprocessor import Preprocessor
-from eng import Controller
+from eng import Controller, BertClassifier
 
 # db = psycopg2.connect(user = "postgres",
 #                       password = "123456",
@@ -24,7 +24,7 @@ from eng import Controller
 
 prep = Preprocessor()
 
-prep.mine(["Twitter","YouTube","Posta"], "Mansur Yavaş", itemSize=10, numberOfComments=5)
+prep.mine(["YouTube","Twitter"], "Mansur Yavaş", itemSize=3, numberOfComments=5)
 
 prep.extractSentences()
 prep.normalizeSentences()
@@ -34,27 +34,25 @@ miningNLPRes = {}
 cont = Controller()
 
 for source in res.keys():
-    dataPool = res[source]
+    dataPool = res[source].copy()
     resList = []
     if source == "Twitter":
-        for data in dataPool:
-            resList.append(cont.avg_result(data))
+        resList.append(cont.avg_result(dataPool))
+        print(dataPool)
 
     elif source == "YouTube":
-        for data in dataPool["Content"]:
-            resList.append(cont.avg_result(data))
+        resList.append(cont.avg_result(dataPool["Content"]))
 
-        for data in dataPool["Comments"]:
-            resList.append(cont.avg_result(data))
+        resList.append(cont.avg_result(dataPool["Comments"]))
 
     
     else:
         for data in dataPool:
-            for title in data.title:
-                resList.append(cont.avg_result(title))
-
-            for article in data.article:
-                resList.append(cont.avg_result(article))
+            #resList.append(cont.avg_result(data.title))
+            print(data.title)
+            print(data.article)
+            #resList.append(cont.avg_result(data.article))
+            
     
     miningNLPRes[source] = resList.copy()
 
