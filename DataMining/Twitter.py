@@ -52,6 +52,8 @@ class Twitter(API):
         return results
 
     def __getResults(self, keyword, itemSize, headers, next_token=None, until_id=None):
+        if itemSize < 10:
+            itemSize = 10
         if next_token == None:
             string = f"https://api.twitter.com/2/tweets/search/recent?query={self.createQuery(keyword)}&max_results={itemSize if itemSize <= 100 else 100}"
         else:

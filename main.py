@@ -1,52 +1,65 @@
+import psycopg2
 from Preprocessing.preprocessor import Preprocessor
-import sys
+from eng import Controller
+
+# db = psycopg2.connect(user = "postgres",
+#                       password = "123456",
+#                       host = "25.33.228.221",
+#                       port = "5432",
+#                       database = "sanlp")
+
+
+# cursor = db.cursor()
+
+# query = "SELECT keyword FROM keywords;"
+# cursor.execute(query)
+
+# result = cursor.fetchall()
+
+# for i in result:
+#     print(i)
+
+
+
 
 prep = Preprocessor()
 
-prep.mine(["YouTube"], sys.argv[1], itemSize=10, numberOfComments=5)
+prep.mine(["Twitter","YouTube","Posta"], "Mansur Yavaş", itemSize=10, numberOfComments=5)
+
+prep.extractSentences()
+prep.normalizeSentences()
 res = prep.getData()
 
-"""for source, data in res.items():
-    print("\n" + source)
-    if source == "YouTube":
-        for cont in data["Content"]:
-            print(cont)
-            print("--------")"""
+miningNLPRes = {}
+cont = Controller()
 
-prep.extractSentences(True, True)
-res = prep.getData()
+for source in res.keys():
+    dataPool = res[source]
+    resList = []
+    if source == "Twitter":
+        for data in dataPool:
+            resList.append(cont.avg_result(data))
 
-for source, data in res.items():
-    print("\n" + source)
-    if source == "YouTube":
-        for cont in data["Content"]:
-            for c in cont:
-                print(c)
-            print("--------")
-    elif source == "Twitter":
-        for da in data:
-            for d in da:
-                print(d)
-            print()
-    print()
-"""
-print("\n\nNormalization\n\n")
-prep.normalizeSentences(True,True)
-res = prep.getData()
+    elif source == "YouTube":
+        for data in dataPool["Content"]:
+            resList.append(cont.avg_result(data))
 
-for source, data in res.items():
-    print(source)
-    if source == "YouTube":
-        for cont,comments in zip(data["Content"], data["Comments"]):
-            print(cont)
-            print()
-            for comment in comments:
-                print(comment)
-            print("--------")
-    elif source == "Twitter":
-        for da in data:
-            for d in da:
-                print(d)
-            print()
-    print()
-"""
+        for data in dataPool["Comments"]:
+            resList.append(cont.avg_result(data))
+
+    
+    else:
+        for data in dataPool:
+            for title in data.title:
+                resList.append(cont.avg_result(title))
+
+            for article in data.article:
+                resList.append(cont.avg_result(article))
+    
+    miningNLPRes[source] = resList.copy()
+
+
+
+
+for key, value in miningNLPRes.items():
+    print(key + ":",value)

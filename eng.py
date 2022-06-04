@@ -19,13 +19,10 @@ from zemberek import (
     TurkishMorphology,
     TurkishTokenizer
 )
-from nltk import tokenize
-from nltk.corpus import stopwords
 from gensim import utils
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 import torch.nn as nn
 from transformers import BertModel
-from transformers import AdamW, get_linear_schedule_with_warmup
 import torch.nn.functional as F
 import pickle
 
@@ -70,7 +67,6 @@ class BertClassifier(nn.Module):
 class Controller():
 
     stopwordList = []
-    bert_classifier = BertClassifier(freeze_bert=True)
     tokenizer = BertTokenizer.from_pretrained('dbmdz/bert-base-turkish-128k-cased', do_lower_case=True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -183,8 +179,8 @@ class Controller():
         return res, val
 
 
-strk = "Bu arabadan nefret ediyorum. Bugün hava çok güzel. Telefon çok iyi ama bataryası kötü hissettiriyor. hizli teslimat tesekkürler. Enflasyondaki artış nedeniyle alım gücü azaldı."
-con = Controller()
-r, val = con.avg_result(strk)
-print(r)
-print(val)
+# strk = "Bu arabadan nefret ediyorum. Bugün hava çok güzel. Telefon çok iyi ama bataryası kötü hissettiriyor. hizli teslimat tesekkürler. Enflasyondaki artış nedeniyle alım gücü azaldı."
+# con = Controller()
+# r, val = con.avg_result(strk)
+# print(r)
+# print(val)

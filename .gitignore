@@ -36,3 +36,4 @@ dump.xml.bz2
 w2v_model1
 /DataMining/geckodriver.log
 geckodriver.log
+model.pickle

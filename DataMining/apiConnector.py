@@ -18,12 +18,12 @@ class Connector:
         "YouTube"
     ]
     newsList = [
-        "Hurriyet",
-        "Sabah",
-        "Haberturk",
-        "Sozcu",
-        "Milliyet",
-        "Posta"
+        "Hurriyet", #broken
+        "Sabah", #broken
+        "Haberturk", #broken
+        "Sozcu", #it seems working
+        "Milliyet", #broken
+        "Posta" #it seems NOT working
     ]
 
     def __init__(self):
