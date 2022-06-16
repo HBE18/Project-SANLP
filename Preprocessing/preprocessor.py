@@ -19,7 +19,7 @@ class Preprocessor:
         self.normalizer = TurkishSentenceNormalizer(self.morphology)
         self.extractor = TurkishSentenceExtractor()
 
-    def mine(self, sources: list[str], keyword="", itemSize=10, numberOfComments=0):
+    def mine(self, sources: list[str], keyword="", itemSize=5, numberOfComments=5):
         for source in sources:
             con = Connector()
             con.connectToApi(source)

@@ -156,17 +156,21 @@ class Controller():
 
         return probs
 
-    def avg_result(self, dat:list[str]):
+    def avg_result(self, dat):
         #sentences = TurkishSentenceExtractor().from_paragraph(dat)
+        res = [0,0,0]
+        val = []
 
         inp_id, att_mask = self.prep(dat)
         test_dataset = TensorDataset(inp_id, att_mask)
         test_sampler = SequentialSampler(test_dataset)
         test_dataloader = DataLoader(test_dataset, sampler=test_sampler, batch_size=32)
+        
+        if inp_id.shape[0] == 0:
+            return res, val
 
         out_val = self.bert_predict(self.bert_classifier, test_dataloader)
-        res = [0,0,0]
-        val = []
+        
         for i in out_val:
             ind = np.argmax(i)
             val.append(ind)
