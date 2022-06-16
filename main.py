@@ -3,7 +3,12 @@ from eng import Controller, BertClassifier
 import matplotlib.pyplot as plt
 import numpy as np
 from Database.postgres import Postgres
+from PIL import Image
+from pymongo import MongoClient
+from datetime import datetime
 
+client = MongoClient("25.33.228.221:27017")
+db = client.sanlp
 
 sql = Postgres()
 keywordList = sql.getAllKeywords()
@@ -49,7 +54,7 @@ for keyword in keywordList:
                 res = np.array([1])
                 lb = ["Değer Yok"]
                 plt.pie(res, labels=lb, autopct='%1.1f%%', shadow=True)
-                fname = "Youtube_Content.png"
+                fname = "YouTube_Content.png"
                 plt.savefig(fname)
                 plt.close()
             if len(value[1][1]) == 0:
@@ -57,14 +62,14 @@ for keyword in keywordList:
                 res = np.array([1])
                 lb = ["Değer Yok"]
                 plt.pie(res, labels=lb, autopct='%1.1f%%', shadow=True)
-                fname = "Youtube_Comment.png"
+                fname = "YouTube_Comment.png"
                 plt.savefig(fname)
                 plt.close()
         else:
             if len(value[0][1]) == 0:
                 res = np.array([1])
                 lb = ["Değer Yok"]
-                plt.pie(res, labels=lb, autopct='%1.1f%%', shadow=True)
+                fig = plt.pie(res, labels=lb, autopct='%1.1f%%', shadow=True)
                 fname = key + ".png"
                 plt.savefig(fname)
                 plt.close()
@@ -100,5 +105,23 @@ for keyword in keywordList:
             plt.savefig(fname)
             plt.close()
         #print(key + ":",value)
+    #TODO: if png does not work switch to jpeg!!
+    cont = Image.open("Youtube_Content.png").tobytes()
+    comt = Image.open("YouTube_Comment.png").tobytes()
+    twt = Image.open("Twitter.png").tobytes()
+    dt = str(datetime.now().date())
+    obj = {
+        'keyword':keyword,
+        'timestamp':dt,
+        'yt_content':cont,
+        'yt_comment':comt,
+        'twitter':twt
+    }
+    with client.start_session() as session:
+        with session.start_transaction():
+            obj = db.results.insert_one(obj)
+    print(obj)
+
+
 
     userList = sql.getUserIdListOfTheKeyword(keyword) # Users who are searching the keyword.
