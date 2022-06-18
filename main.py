@@ -6,6 +6,18 @@ from Database.postgres import Postgres
 from PIL import Image
 from pymongo import MongoClient
 from datetime import datetime
+from io import BytesIO
+import base64
+
+def im_2_b64(image):
+    buff = BytesIO()
+    image.save(buff, format="PNG")
+    img_str = base64.b64encode(buff.getvalue())
+    return img_str
+
+def b64_2_img(data):
+    buff = BytesIO(base64.b64decode(data))
+    return Image.open(buff)
 
 client = MongoClient("25.33.228.221:27017")
 db = client.sanlp
@@ -106,10 +118,13 @@ for keyword in keywordList:
             plt.close()
         #print(key + ":",value)
     #TODO: if png does not work switch to jpeg!!
-    cont = Image.open("Youtube_Content.png").tobytes()
-    comt = Image.open("YouTube_Comment.png").tobytes()
-    twt = Image.open("Twitter.png").tobytes()
-    dt = str(datetime.now().date())
+    im1 = Image.open("Youtube_Content.png")
+    im2 = Image.open("YouTube_Comment.png")
+    im3 = Image.open("Twitter.png")
+    cont = im_2_b64(im1)
+    comt = im_2_b64(im2)
+    twt = im_2_b64(im3)
+    dt = datetime.now()
     obj = {
         'keyword':keyword,
         'timestamp':dt,
@@ -120,8 +135,8 @@ for keyword in keywordList:
     with client.start_session() as session:
         with session.start_transaction():
             obj = db.results.insert_one(obj)
-    print(obj)
+    userList = sql.getUserIdListOfTheKeyword(keyword) # Users who are searching the keyword."""
 
 
 
-    userList = sql.getUserIdListOfTheKeyword(keyword) # Users who are searching the keyword.
+    
