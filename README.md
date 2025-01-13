@@ -5,7 +5,7 @@ Collaborators:
   Batuhan Kutlu / https://github.com/batuhankutlu
   Habip Şanlı / https://github.com/HabipSanli
   Hasan Berkan Eroğlu / https://github.com/HBE18
-  Ramazan Salman / https://github.com/Cathessis
+  Ramazan Salman / https://github.com/ramazansalman
 
 ------------------------------------------------------------------------------------------------------
 
